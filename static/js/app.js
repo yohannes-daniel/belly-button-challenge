@@ -44,26 +44,27 @@ d3.json(url).then(function (data) {
         }
 
         let otuLabels = samplesData[0].otu_labels.slice(0, 10);
-        let newOTULabels = otuLabels.replace(";", "");
-        console.log(newOTULabels);
+        otuLabels = otuLabels[0].replaceAll(";", " ");
+        otuLabels = otuLabels.split(" ")
+        console.log(otuLabels);
 
         // Plotting the bar chart data for the first individual
-        // let trace1 = [{
-        //     x: topSampleValues,
-        //     y: topOTUIdsString,
-        //     type: 'bar',
-        //     orientation: 'h'
-        // }];
+        let trace1 = [{
+            x: topSampleValues,
+            y: topOTUIdsString,
+            type: 'bar',
+            orientation: 'h'
+        }];
         
-        // let dataset1 = [trace1];
+        let dataset1 = [trace1];
 
-        // let layout1 = {
-        //     title: "Top 10 Samples",
-        //     xaxis: "Sample Values",
-        //     yaxis: "OTU IDs"
-        // };
+        let layout1 = {
+            title: "Top 10 Samples",
+            xaxis: "Sample Values",
+            yaxis: "OTU IDs"
+        };
 
-        // Plotly.newPlot("bar", dataset1, layout1);
+        Plotly.newPlot("bar", dataset1, layout1);
 
         // Plotting the bubble chart data for the first individual
         // var trace2 = {
