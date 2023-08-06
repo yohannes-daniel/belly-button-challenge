@@ -1,17 +1,15 @@
 // // Read the json
 const url = "https://2u-data-curriculum-team.s3.amazonaws.com/dataviz-classroom/v1.1/14-Interactive-Web-Visualizations/02-Homework/samples.json";
-
 // Make an empty list to store the values
 d3.json(url).then(function (data) {
-    console.log(data);
-
+    // console.log(data);
+    
     // // Create the dropdown button to change the individual
     let dropDownMenu = d3.select("#selDataset");
-
     function createIDSelection() {
         let ids = data.names;
         for (let i = 0; i < ids.length; i++) {
-            dropDownMenu.append('option').attr("value", `${ids[i]}`).text(`${ids[i]}`);
+            dropDownMenu.append('option').attr("value", `${ids[i]}).text(${ids[i]}`);
         }
     };
     createIDSelection();
@@ -19,54 +17,76 @@ d3.json(url).then(function (data) {
     // Create the base charts
     let samplesData = data.samples;
     function createChart() {
-         
         let topSampleValues = [];
         let topOTUIds = [];
+        console.log("inside createchart");
+        console.log(samplesData);
 
-        // Sort the data in descending order of sample_values
-        let sortedSampleValues = samplesData[0].sample_values.sort((a, b) => b - a);
-        let sortedOTUIds = samplesData[0].otu_ids.sort((a, b) => b - a);
-
-        // Store the top 10 sample_values and otu_ids of each individual
-        topSampleValues.push(sortedSampleValues.slice(0, 10));
-        topOTUIds.push(sortedOTUIds.slice(0, 10));
+        let sampleNames = data.names;
+        let firstSample = sampleNames[0];
+        console.log("hi")
+        console.log(firstSample)
         
-        console.log(topSampleValues);
-        console.log(topOTUIds);
-
-        // Convert OTU IDs into strings
-        let topOTUIdsString = topOTUIds.toString();
-        topOTUIdsString = topOTUIdsString.split(",")
-        console.log(topOTUIdsString);
-
-        for (let i=0; i<topOTUIdsString.length; i++) {
-            topOTUIdsString[i] = `OTU ${topOTUIdsString[i]}`
-        }
-
-        let otuLabels = samplesData[0].otu_labels.slice(0, 10);
-        otuLabels = otuLabels[0].replaceAll(";", " ");
-        otuLabels = otuLabels.split(" ")
-        console.log(otuLabels);
-
-        // Plotting the bar chart data for the first individual
-        let trace1 = [{
-            x: topSampleValues,
-            y: topOTUIdsString,
-            type: 'bar',
-            orientation: 'h'
-        }];
-        
-        let dataset1 = [trace1];
-
-        let layout1 = {
-            title: "Top 10 Samples",
-            xaxis: "Sample Values",
-            yaxis: "OTU IDs"
+        // Use the optionChanged
+        let resultArray = samplesData.filter(sampleObj => sampleObj.id == firstSample);
+        let result = resultArray[0];
+        let otu_ids = result.otu_ids;
+        let otu_labels = result.otu_labels;
+        let sample_values = result.sample_values;
+        let yticks = otu_ids.slice(0, 10).map(otuID => `OTU ${otuID}`).reverse();
+        let barData = [
+          {
+            y: yticks,
+            x: sample_values.slice(0, 10).reverse(),
+            text: otu_labels.slice(0, 10).reverse(),
+            type: "bar",
+            orientation: "h",
+          }
+        ];
+        let barLayout = {
+          title: "Top 10 Bacteria Cultures Found",
+          margin: { t: 30, l: 150 }
         };
-
-        Plotly.newPlot("bar", dataset1, layout1);
-
-        // Plotting the bubble chart data for the first individual
+        Plotly.newPlot("bar", barData, barLayout);
+        
+        // // Sort the data in descending order of sample_values
+        // let sortedSampleValues = samplesData[0].sample_values.sort((a, b) => b - a);
+        // let sortedOTUIds = samplesData[0].otu_ids.sort((a, b) => b - a);
+        
+        // // Store the top 10 sample_values and otu_ids of each individual
+        // topSampleValues.push(sortedSampleValues.slice(0, 10));
+        // topOTUIds.push(sortedOTUIds.slice(0, 10));
+        // console.log(topSampleValues);
+        // console.log(topOTUIds);
+        
+        // // Convert OTU IDs into strings
+        // let topOTUIdsString = topOTUIds.toString();
+        // topOTUIdsString = topOTUIdsString.split(",")
+        // console.log(topOTUIdsString);
+        // for (let i=0; i<topOTUIdsString.length; i++) {
+        //     topOTUIdsString[i] = `OTU ${topOTUIdsString[i]}`;
+        // }
+        // let otuLabels = samplesData[0].otu_labels.slice(0, 10);
+        // otuLabels = otuLabels[0].replaceAll(";", " ");
+        // otuLabels = otuLabels.split(" ")
+        // console.log(otuLabels);
+        
+        // // Plotting the bar chart data for the first individual
+        // let trace1 = [{
+        //     x: topSampleValues,
+        //     y: topOTUIdsString,
+        //     type: 'bar',
+        //     orientation: 'h'
+        // }];
+        // let dataset1 = trace1;
+        // let layout1 = {
+        //     title: "Top 10 Samples",
+        //     xaxis: "Sample Values",
+        //     yaxis: "OTU IDs"
+        // };
+        // Plotly.newPlot("bar", dataset1, layout1);
+        
+        // // Plotting the bubble chart data for the first individual
         // var trace2 = {
         //     x: topOTUIds,
         //     y: topSampleValues,
@@ -81,17 +101,23 @@ d3.json(url).then(function (data) {
         // };
         // console.log(trace2.x);
         // console.log(trace2.y);
-    
         // var dataset2 = [trace2];
-    
         // var layout2 = {
-        //     showlegend: false,
+        //      showlegend: false,
         //     height: 600,
         //     width: 600,
         //     xaxis: "OTU ID"
         // };
-    
         // Plotly.newPlot('bubble', dataset2, layout2);
     };
     createChart();
 });
+
+
+
+
+
+
+
+
+
