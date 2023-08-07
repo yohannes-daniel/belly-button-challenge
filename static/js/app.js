@@ -8,7 +8,7 @@ d3.json(url).then(function(data) {
     for (let i = 0; i < ids.length; i++) {
         dropDownMenu.append('option').attr("value", `${ids[i]}`).text(`${ids[i]}`);
     }
-})
+});
 
 // Metadata Output
 function buildMetadata(newSample) {
@@ -46,7 +46,7 @@ function buildCharts(newSample) {
             text: otu_labels.slice(0, 10).reverse(),
             type: "bar",
             orientation: "h",
-        }
+        };
         let barData = [trace1];
         let barLayout = {
             title: "Top 10 Bacteria Cultures Found",
@@ -80,7 +80,7 @@ function buildCharts(newSample) {
         Plotly.newPlot('bubble', bubbleData, layout2);
     
     });
-}
+};
 
 // Inputs flowing through the functions
 function optionChanged(newSample) {
