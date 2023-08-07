@@ -1,13 +1,8 @@
-// // Read the json
+// Read the json
 const url = "https://2u-data-curriculum-team.s3.amazonaws.com/dataviz-classroom/v1.1/14-Interactive-Web-Visualizations/02-Homework/samples.json";
 
 // Establish IDs of the individuals
 d3.json(url).then(function(data) {
-    console.log(data);
-    
-    let samplesData = data.samples;
-    console.log(samplesData);
-    
     let ids = data.names;
     let dropDownMenu = d3.select("#selDataset");
     for (let i = 0; i < ids.length; i++) {
@@ -17,15 +12,10 @@ d3.json(url).then(function(data) {
 
 // Metadata Output
 function buildMetadata(newSample) {
-    console.log(newSample);
-    
     d3.json(url).then(function(data) {
-        console.log(data);
-
         // Filter the data for the object with the desired sample number
         let metadata = data.metadata;
-        console.log(metadata);
-
+        
         let resultArray = metadata.filter(sampleObj => sampleObj.id == newSample);
         let result = resultArray[0];
         
@@ -40,12 +30,8 @@ function buildMetadata(newSample) {
 // Chart Outputs
 function buildCharts(newSample) {
     d3.json(url).then(function(data) {
-    
-        console.log(data);
         let samplesData = data.samples;
-        console.log(samplesData);
-        console.log(data.names);
-
+        
         let resultArray = samplesData.filter(sampleObj => sampleObj.id == newSample);
         let result = resultArray[0];
         let otu_ids = result.otu_ids;
@@ -53,7 +39,6 @@ function buildCharts(newSample) {
         let sample_values = result.sample_values;
         let ybar = otu_ids.slice(0, 10).map(otuID => `OTU ${otuID}`).reverse();
         
-    
         // Plotting the bar chart
         let trace1 = {
             x: sample_values.slice(0, 10).reverse(),
