@@ -1,15 +1,6 @@
 // Read the json
 const url = "https://2u-data-curriculum-team.s3.amazonaws.com/dataviz-classroom/v1.1/14-Interactive-Web-Visualizations/02-Homework/samples.json";
 
-// Establish IDs of the individuals
-d3.json(url).then(function(data) {
-    let ids = data.names;
-    let dropDownMenu = d3.select("#selDataset");
-    for (let i = 0; i < ids.length; i++) {
-        dropDownMenu.append('option').attr("value", `${ids[i]}`).text(`${ids[i]}`);
-    }
-});
-
 // Metadata Output
 function buildMetadata(newSample) {
     d3.json(url).then(function(data) {
@@ -81,6 +72,19 @@ function buildCharts(newSample) {
     
     });
 };
+
+// Establish IDs of the individuals
+d3.json(url).then(function(data) {
+    let ids = data.names;
+    let dropDownMenu = d3.select("#selDataset");
+    for (let i = 0; i < ids.length; i++) {
+        dropDownMenu.append('option').attr("value", `${ids[i]}`).text(`${ids[i]}`);
+    }
+
+    // Display the chart here.....
+    buildMetadata(ids[0]);
+    buildCharts(ids[0]);
+});
 
 // Inputs flowing through the functions
 function optionChanged(newSample) {
